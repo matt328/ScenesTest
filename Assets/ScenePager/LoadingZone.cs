@@ -34,6 +34,7 @@ public class LoadingZone : MonoBehaviour {
   }
 
   public void CollisionExited(LoadingState loadingState) {
+    Debug.LogFormat("CollisionExited: {0}", loadingState);
     if (loadingState == LoadingState.PRELOADING) {
       SendMessageUpwards("LoadingEvent", new LoadingEvent(location, LoadingEventType.UNLOAD));
     }

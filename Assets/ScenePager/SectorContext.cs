@@ -3,9 +3,8 @@ using UnityEngine;
 
 public class SectorContext {
 
-  [SerializeField]
   public Vector2 CurrentSector { get; private set; } = Vector2.zero;
-  public List<Vector2> LoadedSectors { get; private set; } = new List<Vector2>();
+  public HashSet<Vector2> LoadedSectors { get; private set; } = new HashSet<Vector2>();
 
   public List<Vector2> SetInitialPosition(Vector2 position) {
     CurrentSector = position;

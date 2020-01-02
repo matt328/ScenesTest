@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-
+using ExtensionMethods;
 /* TODO:
   1. Clean up events thrown when the colliders move from one sector to the next
   2. Implement origin shifting when changing sectors
@@ -36,15 +36,19 @@ public class ScenePager : MonoBehaviour {
 
   public void LoadingEvent(LoadingEvent e) {
     Debug.LogFormat("Loading Event: {0}", e);
+
     if (e.LoadType == LoadingEventType.CHANGE_SECTOR) {
       ChangeSector(e.Direction);
       return;
     }
+
     var affectedSectors = sectorContext.CalculateAffectedSectors(e.Direction);
 
     if (e.LoadType == LoadingEventType.LOAD) {
       foreach (var sceneCoords in affectedSectors) {
         if (sectorMap.GetSceneNameForSector(sceneCoords) != null) {
+          Debug.LogFormat("Loading SceneCoord: {0}", sceneCoords);
+          Debug.LogFormat("LoadedSectors: {0}", sectorContext.LoadedSectors.Print());
           if (!sectorContext.LoadedSectors.Contains(sceneCoords)) {
             StartCoroutine(LoadScene(sceneCoords));
           }
@@ -84,11 +88,14 @@ public class ScenePager : MonoBehaviour {
   private IEnumerator UnloadScene(Vector2 sceneCoords) {
     var sceneName = sectorMap.GetSceneNameForSector(sceneCoords);
     AsyncOperation asyncOperation = SceneManager.UnloadSceneAsync(sceneName);
+    Debug.LogFormat("Removing Sector: {0}", sceneCoords);
     sectorContext.LoadedSectors.Remove(sceneCoords);
+    Debug.LogFormat("LoadedSectors: {0}", sectorContext.LoadedSectors.Print());
     yield return null;
   }
 
   private IEnumerator LoadScene(Vector2 sceneCoords) {
+    Debug.LogFormat("Loading Scene Coords: {0}", sceneCoords);
     var sceneName = sectorMap.GetSceneNameForSector(sceneCoords);
     SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
     sectorContext.LoadedSectors.Add(sceneCoords);
