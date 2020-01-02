@@ -1,5 +1,12 @@
 ﻿using UnityEngine;
 
+public enum LoadingState {
+  NONE,
+  PRELOADING,
+  LOADING,
+  LEAVING
+}
+
 public class CollisionArea : MonoBehaviour {
   private Color originalColor;
   private MeshRenderer meshRenderer;
@@ -15,13 +22,17 @@ public class CollisionArea : MonoBehaviour {
   }
 
   private void OnTriggerEnter(Collider other) {
-    originalColor = meshRenderer.material.color;
-    meshRenderer.material.color = activeColor;
+    if (meshRenderer != null) {
+      originalColor = meshRenderer.material.color;
+      meshRenderer.material.color = activeColor;
+    }
     SendMessageUpwards("CollisionEntered", loadingState);
   }
 
   private void OnTriggerExit(Collider other) {
-    meshRenderer.material.color = originalColor;
+    if (meshRenderer != null) {
+      meshRenderer.material.color = originalColor;
+    }
     SendMessageUpwards("CollisionExited", loadingState);
   }
 

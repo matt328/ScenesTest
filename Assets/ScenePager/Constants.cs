@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Constants {
-  public static Dictionary<Direction, Vector2> LocationMap = new Dictionary<Direction, Vector2>(){
+  public static readonly Dictionary<Direction, Vector2> LocationMap = new Dictionary<Direction, Vector2>(){
     { Direction.NORTHWEST, new Vector2(-1, 1)},
     { Direction.NORTH, new Vector2(0, 1)},
     { Direction.NORTHEAST, new Vector2(1, 1)},

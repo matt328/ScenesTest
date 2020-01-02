@@ -1,12 +1,5 @@
 ﻿using UnityEngine;
 
-public enum LoadingState {
-  NONE,
-  PRELOADING,
-  LOADING,
-  LEAVING
-}
-
 public enum LoadingEventType {
   LOAD,
   UNLOAD,
@@ -14,8 +7,8 @@ public enum LoadingEventType {
 }
 
 public class LoadingEvent {
-  public Direction Direction { get; private set; }
-  public LoadingEventType LoadType { get; private set; }
+  public Direction Direction { get; }
+  public LoadingEventType LoadType { get; }
 
   public LoadingEvent(Direction direction, LoadingEventType loadType) {
     Direction = direction;

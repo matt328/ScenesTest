@@ -2,6 +2,14 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+/* TODO:
+  1. Clean up events thrown when the colliders move from one sector to the next
+  2. Implement origin shifting when changing sectors
+  3. Build out huge world for testing
+  4. Make collision detectors' transforms based on terrain size.
+  5. Pack the whole thing into a prefab
+*/
+
 public class ScenePager : MonoBehaviour {
 
   [SerializeField]
@@ -59,16 +67,17 @@ public class ScenePager : MonoBehaviour {
   }
 
   private void ChangeSector(Direction direction) {
+    // Inform SectorContext we've moved
     sectorContext.MoveToSector(direction);
+
+    // Move all of our GameObjects that should come with us to the next scene
+    // in order to preserve them should the initial scene be unloaded.
     var newSceneName = sectorMap.GetSceneNameForSector(sectorContext.CurrentSector);
     SceneManager.MoveGameObjectToScene(gameObject, SceneManager.GetSceneByName(newSceneName));
     SceneManager.MoveGameObjectToScene(player, SceneManager.GetSceneByName(newSceneName));
-    ShiftColliders(direction);
-  }
 
-  private void ShiftColliders(Direction dir) {
-    var offsetVector = new Vector3(Constants.LocationMap[dir].x, 0, Constants.LocationMap[dir].y) * terrainSize;
-    Debug.LogFormat("Shifting Colliders by {0}", offsetVector.ToString());
+    // Recenter the collision detectors to the new scene's location
+    var offsetVector = new Vector3(Constants.LocationMap[direction].x, 0, Constants.LocationMap[direction].y) * terrainSize;
     transform.position += offsetVector;
   }
 

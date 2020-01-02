@@ -21,11 +21,8 @@ public class SectorContext {
     return new List<Vector2>(LoadedSectors);
   }
 
-  public List<Vector2> MoveToSector(Direction direction) {
+  public void MoveToSector(Direction direction) {
     CurrentSector += Constants.LocationMap[direction];
-    var unloadDirection = DirectionUtils.OppositeOf(direction);
-    var toUnload = CalculateAffectedSectors(unloadDirection);
-    return toUnload;
   }
 
   public List<Vector2> AddAdditionalSectorsForUnload(List<Vector2> toUnload, Direction direction) {
@@ -87,6 +84,45 @@ public class SectorContext {
       newSectors.Add(new Vector2(currentX - 2, currentY + 1));
       // NorthWest Sector
       newSectors.Add(new Vector2(currentX - 2, currentY + 2));
+    }
+
+    if (direction == Direction.NORTHEAST) {
+      // North Sectors
+      newSectors.Add(new Vector2(currentX - 1, currentY + 2));
+      newSectors.Add(new Vector2(currentX, currentY + 2));
+      newSectors.Add(new Vector2(currentX + 1, currentY + 2));
+      // East Sectors
+      newSectors.Add(new Vector2(currentX + 2, currentY - 1));
+      newSectors.Add(new Vector2(currentX + 2, currentY));
+      newSectors.Add(new Vector2(currentX + 2, currentY + 1));
+      // NorthEast Sector
+      newSectors.Add(new Vector2(currentX + 2, currentY + 2));
+    }
+
+    if (direction == Direction.SOUTHEAST) {
+      // South Sectors
+      newSectors.Add(new Vector2(currentX - 1, currentY - 2));
+      newSectors.Add(new Vector2(currentX, currentY - 2));
+      newSectors.Add(new Vector2(currentX + 1, currentY - 2));
+      // East Sectors
+      newSectors.Add(new Vector2(currentX + 2, currentY - 1));
+      newSectors.Add(new Vector2(currentX + 2, currentY));
+      newSectors.Add(new Vector2(currentX + 2, currentY + 1));
+      // SouthEast Sector
+      newSectors.Add(new Vector2(currentX + 2, currentY - 2));
+    }
+
+    if (direction == Direction.SOUTHWEST) {
+      // South Sectors
+      newSectors.Add(new Vector2(currentX - 1, currentY - 2));
+      newSectors.Add(new Vector2(currentX, currentY - 2));
+      newSectors.Add(new Vector2(currentX + 1, currentY - 2));
+      // West Sectors
+      newSectors.Add(new Vector2(currentX - 2, currentY - 1));
+      newSectors.Add(new Vector2(currentX - 2, currentY));
+      newSectors.Add(new Vector2(currentX - 2, currentY + 1));
+      // SouthWest Sector
+      newSectors.Add(new Vector2(currentX - 2, currentY - 2));
     }
 
     return newSectors;
