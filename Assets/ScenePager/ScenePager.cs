@@ -3,7 +3,6 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using ExtensionMethods;
 /* TODO:
-  1. Clean up events thrown when the colliders move from one sector to the next
   2. Implement origin shifting when changing sectors
   3. Build out huge world for testing
   4. Make collision detectors' transforms based on terrain size.
@@ -47,8 +46,6 @@ public class ScenePager : MonoBehaviour {
     if (e.LoadType == LoadingEventType.LOAD) {
       foreach (var sceneCoords in affectedSectors) {
         if (sectorMap.GetSceneNameForSector(sceneCoords) != null) {
-          Debug.LogFormat("Loading SceneCoord: {0}", sceneCoords);
-          Debug.LogFormat("LoadedSectors: {0}", sectorContext.LoadedSectors.Print());
           if (!sectorContext.LoadedSectors.Contains(sceneCoords)) {
             StartCoroutine(LoadScene(sceneCoords));
           }
@@ -83,22 +80,36 @@ public class ScenePager : MonoBehaviour {
     // Recenter the collision detectors to the new scene's location
     var offsetVector = new Vector3(Constants.LocationMap[direction].x, 0, Constants.LocationMap[direction].y) * terrainSize;
     transform.position += offsetVector;
+
+    // Origin Shifting
+    for (int z = 0; z < SceneManager.sceneCount; z++) {
+      foreach (var gameObject in SceneManager.GetSceneAt(z).GetRootGameObjects()) {
+        gameObject.transform.position -= offsetVector;
+      }
+    }
   }
 
   private IEnumerator UnloadScene(Vector2 sceneCoords) {
     var sceneName = sectorMap.GetSceneNameForSector(sceneCoords);
     AsyncOperation asyncOperation = SceneManager.UnloadSceneAsync(sceneName);
-    Debug.LogFormat("Removing Sector: {0}", sceneCoords);
     sectorContext.LoadedSectors.Remove(sceneCoords);
-    Debug.LogFormat("LoadedSectors: {0}", sectorContext.LoadedSectors.Print());
     yield return null;
   }
 
   private IEnumerator LoadScene(Vector2 sceneCoords) {
-    Debug.LogFormat("Loading Scene Coords: {0}", sceneCoords);
     var sceneName = sectorMap.GetSceneNameForSector(sceneCoords);
-    SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
+    AsyncOperation op = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
+
+    while (!op.isDone) yield return null;
+
     sectorContext.LoadedSectors.Add(sceneCoords);
+    var offsetVector = new Vector3(sectorContext.CurrentSector.x, 0f, sectorContext.CurrentSector.y) * terrainSize;
+    Debug.LogFormat("OffsetVector: {0}", offsetVector);
+    foreach (var gameObject in SceneManager.GetSceneByName(sceneName).GetRootGameObjects()) {
+      Debug.LogFormat("Moving objects in scene {0}", sceneName);
+      gameObject.transform.position -= offsetVector;
+    }
+
     yield return null;
   }
 }
