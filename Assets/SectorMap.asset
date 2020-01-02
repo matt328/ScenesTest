@@ -12,4 +12,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75e62a6f83c7641daa08747421bde0aa, type: 3}
   m_Name: SectorMap
   m_EditorClassIdentifier: 
-  currentSector: {x: 0, y: 0}
+  sectors:
+  - Position: {x: 0, y: 0}
+    SceneName: Scene1
+  - Position: {x: 0, y: 1}
+    SceneName: Scene2
+  - Position: {x: -1, y: 1}
+    SceneName: Scene-1_1
+  - Position: {x: 1, y: 1}
+    SceneName: Scene1_1
+  - Position: {x: -1, y: 0}
+    SceneName: Scene-1_0
+  - Position: {x: 1, y: 0}
+    SceneName: Scene1_0
+  - Position: {x: -1, y: -1}
+    SceneName: Scene-1_-1
+  - Position: {x: 0, y: -1}
+    SceneName: Scene0_-1
+  - Position: {x: 1, y: -1}
+    SceneName: Scene1_-1
+  - Position: {x: -2, y: -1}
+    SceneName: Scene-2_-1
+  - Position: {x: -2, y: 0}
+    SceneName: Scene-2_0
+  - Position: {x: -2, y: 1}
+    SceneName: Scene-2_1
+  - Position: {x: -2, y: 2}
+    SceneName: Scene-2_2
+  - Position: {x: -1, y: 2}
+    SceneName: Scene-1_2
+  - Position: {x: 0, y: 2}
+    SceneName: Scene3
+  - Position: {x: 1, y: 2}
+    SceneName: Scene1_2

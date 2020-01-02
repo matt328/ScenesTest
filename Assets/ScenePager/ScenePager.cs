@@ -10,19 +10,7 @@ using System.Collections.Generic;
 5. Pack the whole thing into a prefab
 */
 
-[System.Serializable]
-public class SceneLocation {
-  [SerializeField]
-  private string SceneName;
-
-  [SerializeField]
-  private Vector2 Position;
-}
-
 public class ScenePager : MonoBehaviour {
-
-  [SerializeField]
-  private List<SceneLocation> Scenes;
 
   [SerializeField]
   private SectorMap sectorMap = null;
@@ -33,9 +21,15 @@ public class ScenePager : MonoBehaviour {
   [SerializeField]
   private Terrain terrain;
 
+  [SerializeField]
+  private bool debugCollisions = false;
+
   private SectorContext sectorContext = new SectorContext();
 
   private void Start() {
+    if (!debugCollisions) {
+      DisableVisualCollisionDetectors();
+    }
     var sectorCoords = sectorContext.SetInitialPosition(Vector2.zero);
     foreach (var sceneCoords in sectorCoords) {
       if (sectorMap.GetSceneNameForSector(sceneCoords) != null) {
@@ -124,5 +118,14 @@ public class ScenePager : MonoBehaviour {
     }
 
     yield return null;
+  }
+
+  private void DisableVisualCollisionDetectors() {
+    var collisionAreas = gameObject.FindComponentsInChildrenWithTag<Component>("LoadingZone");
+    foreach (var c in collisionAreas) {
+      c.GetComponent<MeshRenderer>().enabled = false;
+      c.transform.localScale = new Vector3(c.transform.localScale.x, 600, c.transform.localScale.z);
+      c.transform.position = new Vector3(c.transform.position.x, 300, c.transform.position.z);
+    }
   }
 }

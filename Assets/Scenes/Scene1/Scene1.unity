@@ -204,6 +204,7 @@ MonoBehaviour:
   sectorMap: {fileID: 11400000, guid: 81345b4439e904950be2cfb9aa7e2cee, type: 2}
   player: {fileID: 1001312974}
   terrain: {fileID: 1250904062}
+  debugCollisions: 0
 --- !u!4 &23740749
 Transform:
   m_ObjectHideFlags: 0
@@ -2791,10 +2792,20 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 99856764273522640, guid: 619a1aa7a342f44c0adea4f7f816ff03,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 99856765334430667, guid: 619a1aa7a342f44c0adea4f7f816ff03,
         type: 3}
       propertyPath: m_Name
       value: ScenePager
+      objectReference: {fileID: 0}
+    - target: {fileID: 99856765334430668, guid: 619a1aa7a342f44c0adea4f7f816ff03,
+        type: 3}
+      propertyPath: Scenes.Array.size
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 99856765334430668, guid: 619a1aa7a342f44c0adea4f7f816ff03,
         type: 3}
@@ -2855,6 +2866,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 99856765334430669, guid: 619a1aa7a342f44c0adea4f7f816ff03,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 99856765356326084, guid: 619a1aa7a342f44c0adea4f7f816ff03,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 619a1aa7a342f44c0adea4f7f816ff03, type: 3}
