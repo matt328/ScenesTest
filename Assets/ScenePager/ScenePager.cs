@@ -2,14 +2,27 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using ExtensionMethods;
+using System.Collections.Generic;
 /* TODO:
-  2. Implement origin shifting when changing sectors
-  3. Build out huge world for testing
-  4. Make collision detectors' transforms based on terrain size.
-  5. Pack the whole thing into a prefab
+2. Implement origin shifting when changing sectors
+3. Build out huge world for testing
+4. Make collision detectors' transforms based on terrain size.
+5. Pack the whole thing into a prefab
 */
 
+[System.Serializable]
+public class SceneLocation {
+  [SerializeField]
+  private string SceneName;
+
+  [SerializeField]
+  private Vector2 Position;
+}
+
 public class ScenePager : MonoBehaviour {
+
+  [SerializeField]
+  private List<SceneLocation> Scenes;
 
   [SerializeField]
   private SectorMap sectorMap = null;
@@ -18,7 +31,7 @@ public class ScenePager : MonoBehaviour {
   private GameObject player = null;
 
   [SerializeField]
-  private float terrainSize = 100f;
+  private Terrain terrain;
 
   private SectorContext sectorContext = new SectorContext();
 
@@ -78,7 +91,7 @@ public class ScenePager : MonoBehaviour {
     SceneManager.MoveGameObjectToScene(player, SceneManager.GetSceneByName(newSceneName));
 
     // Recenter the collision detectors to the new scene's location
-    var offsetVector = new Vector3(Constants.LocationMap[direction].x, 0, Constants.LocationMap[direction].y) * terrainSize;
+    var offsetVector = new Vector3(Constants.LocationMap[direction].x, 0, Constants.LocationMap[direction].y) * terrain.terrainData.size.x;
     transform.position += offsetVector;
 
     // Origin Shifting
@@ -103,7 +116,7 @@ public class ScenePager : MonoBehaviour {
     while (!op.isDone) yield return null;
 
     sectorContext.LoadedSectors.Add(sceneCoords);
-    var offsetVector = new Vector3(sectorContext.CurrentSector.x, 0f, sectorContext.CurrentSector.y) * terrainSize;
+    var offsetVector = new Vector3(sectorContext.CurrentSector.x, 0f, sectorContext.CurrentSector.y) * terrain.terrainData.size.x;
     Debug.LogFormat("OffsetVector: {0}", offsetVector);
     foreach (var gameObject in SceneManager.GetSceneByName(sceneName).GetRootGameObjects()) {
       Debug.LogFormat("Moving objects in scene {0}", sceneName);
