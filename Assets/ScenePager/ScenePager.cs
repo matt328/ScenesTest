@@ -33,19 +33,27 @@ public class ScenePager : MonoBehaviour {
       return;
     }
     var affectedSectors = sectorContext.CalculateAffectedSectors(e.Direction);
-    foreach (var sceneCoords in affectedSectors) {
-      if (sectorMap.GetSceneNameForSector(sceneCoords) != null) {
-        if (e.LoadType == LoadingEventType.LOAD) {
+
+    if (e.LoadType == LoadingEventType.LOAD) {
+      foreach (var sceneCoords in affectedSectors) {
+        if (sectorMap.GetSceneNameForSector(sceneCoords) != null) {
           if (!sectorContext.LoadedSectors.Contains(sceneCoords)) {
             StartCoroutine(LoadScene(sceneCoords));
           }
         } else {
+          Debug.LogWarningFormat("No scene exists for coordinates {0}", sceneCoords.ToString());
+        }
+      }
+    } else if (e.LoadType == LoadingEventType.UNLOAD) {
+      var toUnload = sectorContext.AddAdditionalSectorsForUnload(affectedSectors, e.Direction);
+      foreach (var sceneCoords in toUnload) {
+        if (sectorMap.GetSceneNameForSector(sceneCoords) != null) {
           if (sectorContext.LoadedSectors.Contains(sceneCoords)) {
             StartCoroutine(UnloadScene(sceneCoords));
           }
+        } else {
+          Debug.LogWarningFormat("No scene exists for coordinates {0}", sceneCoords.ToString());
         }
-      } else {
-        Debug.LogWarningFormat("No scene exists for coordinates {0}", sceneCoords.ToString());
       }
     }
   }

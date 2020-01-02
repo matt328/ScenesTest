@@ -20,9 +20,10 @@ public class SectorMap : ScriptableObject {
     {new Vector2(-1, -1), new Sector(-1, -1, "Scene-1_-1")},
     {new Vector2(0, -1), new Sector(0, -1, "Scene0_-1")},
     {new Vector2(1, -1), new Sector(1, -1, "Scene1_-1")},
-    {new Vector2(-2, -1), new Sector(-1, -1, "Scene-2_-1")},
-    {new Vector2(-2, 0), new Sector(0, -1, "Scene-2_0")},
-    {new Vector2(-2, 1), new Sector(1, -1, "Scene-2_1")}
+    {new Vector2(-2, -1), new Sector(-2, -1, "Scene-2_-1")},
+    {new Vector2(-2, 0), new Sector(-2, 0, "Scene-2_0")},
+    {new Vector2(-2, 1), new Sector(-2, 1, "Scene-2_1")},
+    {new Vector2(-2, 2), new Sector(-2, 2, "Scene-2_2")}
   };
 
   public string GetSceneNameForSector(Vector2 vector) {
