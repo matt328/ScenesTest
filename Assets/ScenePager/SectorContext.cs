@@ -44,15 +44,31 @@ public class SectorContext {
     var newSectors = new List<Vector2>();
     var cX = CurrentSector.x;
     var nY = CurrentSector.y;
-    if (direction == Direction.NORTH) {
-      nY += 2;
+
+    if (direction == Direction.NORTH || direction == Direction.SOUTH) {
+      if (direction == Direction.NORTH) {
+        nY += 2;
+      }
+      if (direction == Direction.SOUTH) {
+        nY -= 2;
+      }
+      newSectors.Add(new Vector2(cX - 1, nY));
+      newSectors.Add(new Vector2(cX, nY));
+      newSectors.Add(new Vector2(cX + 1, nY));
     }
-    if (direction == Direction.SOUTH) {
-      nY -= 2;
+
+    if (direction == Direction.EAST || direction == Direction.WEST) {
+      if (direction == Direction.EAST) {
+        cX += 2;
+      }
+      if (direction == Direction.WEST) {
+        cX -= 2;
+      }
+      newSectors.Add(new Vector2(cX, nY - 1));
+      newSectors.Add(new Vector2(cX, nY));
+      newSectors.Add(new Vector2(cX, nY + 1));
     }
-    newSectors.Add(new Vector2(cX - 1, nY));
-    newSectors.Add(new Vector2(cX, nY));
-    newSectors.Add(new Vector2(cX + 1, nY));
+
     return newSectors;
   }
 }
