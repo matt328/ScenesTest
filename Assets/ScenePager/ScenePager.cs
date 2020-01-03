@@ -4,10 +4,9 @@ using UnityEngine.SceneManagement;
 using ExtensionMethods;
 using System.Collections.Generic;
 /* TODO:
-2. Implement origin shifting when changing sectors
-3. Build out huge world for testing
-4. Make collision detectors' transforms based on terrain size.
-5. Pack the whole thing into a prefab
+  - Build out huge world for testing
+  - Make collision detectors' transforms based on terrain size.
+  - Pack the whole thing into a prefab
 */
 
 public class ScenePager : MonoBehaviour {
@@ -26,6 +25,8 @@ public class ScenePager : MonoBehaviour {
 
   private SectorContext sectorContext = new SectorContext();
 
+  private Vector3 queuedOffset = Vector3.zero;
+
   private void Start() {
     if (!debugCollisions) {
       DisableVisualCollisionDetectors();
@@ -38,6 +39,17 @@ public class ScenePager : MonoBehaviour {
         Debug.LogWarningFormat("No scene exists for coordinates {0}", sceneCoords.ToString());
       }
     }
+  }
+
+  private void Update() {
+    if (queuedOffset != Vector3.zero) {
+      for (int z = 0; z < SceneManager.sceneCount; z++) {
+        foreach (var gameObject in SceneManager.GetSceneAt(z).GetRootGameObjects()) {
+          gameObject.transform.position -= queuedOffset;
+        }
+      }
+    }
+    queuedOffset = Vector3.zero;
   }
 
   public void LoadingEvent(LoadingEvent e) {
@@ -87,13 +99,7 @@ public class ScenePager : MonoBehaviour {
     // Recenter the collision detectors to the new scene's location
     var offsetVector = new Vector3(Constants.LocationMap[direction].x, 0, Constants.LocationMap[direction].y) * terrain.terrainData.size.x;
     transform.position += offsetVector;
-
-    // Origin Shifting
-    for (int z = 0; z < SceneManager.sceneCount; z++) {
-      foreach (var gameObject in SceneManager.GetSceneAt(z).GetRootGameObjects()) {
-        gameObject.transform.position -= offsetVector;
-      }
-    }
+    queuedOffset = offsetVector;
   }
 
   private IEnumerator UnloadScene(Vector2 sceneCoords) {
